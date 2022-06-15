@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: ${APP_NAME:master-service}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    #url: jdbc:tibero:thin:@${SECRETS_DB_IP:10.10.10.60}:${SECRETS_DB_PORT:8629}:${SECRETS_DB_SCHEMA:GDL}
+    url: jdbc:postgresql://${config-postgres-url:10.10.10.154}:${config-postgres-port:5432}/${config-postgres-schema:pea}?prepareThreshold=0
+    username: ${SECRET_POSTGRES_USER:pea}
+    password: ${SECRET_POSTGRES_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      max-wait: 20000
+      max-active: 50
+      max-idle: 20
+      min-idle: 15
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default-schema: CGS
+        format_sql: true
+        id:
+          new_generator_mappings: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+server:
+  port: 8080
+  servlet:
+    context-path: /${APP_NAME:master-service}
+logbook:
+  format.style: json
+  filter.enabled: true
+logging.level.org.zalando.logbook: TRACE
+#Show SQL Value
+logging.level.org.hibernate.SQL: debug
+logging.level.org.hibernate.type.descriptor.sql: trace
+
+
+
